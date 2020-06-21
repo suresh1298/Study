@@ -1,0 +1,120 @@
+---
+- name: welcome to ansible playbook
+  hosts: host
+  gather_facts: false
+  tasks:
+    - name: download sonarqube
+      get_url:
+        url: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-7.4.zip
+        dest: /opt
+        remote_src: yes
+    - name: unzip sonarqude
+      unarchive:
+        src: /opt/sonarqube-7.4.zip
+        dest: /opt/
+        remote_src: yes
+    - name: change ownership
+      file:
+        path: /opt/sonarqube-7.4
+        owner: ec2-user
+        group: ec2-user
+        recurse: yes
+    - name: copy sonarqube
+      copy:
+        src: /opt/sonarqube-7.4/bin/linux-x86-64/sonar.sh
+        dest: /opt/sonarqube-7.4/bin/linux-x86-64/
+    - name: startsonar
+      shell : nohup /opt/sonarqube-7.4/bin/linux-x86-64/sonar.sh start
+      
+      
+      
+      ---
+-  name: welcome to ansible playbook
+   hosts: host
+   gather_facts: false
+   tasks:
+     - name: startsonar
+       shell : nohup /opt/sonarqube-7.4/bin/linux-x86-64/sonar.sh status
+     - name: start tomcat
+       shell: /opt/apache-tomcat-9.0.36/bin/startup.sh status
+     - name: to start nexus
+       shell: nohup /opt/nexus-3.24.0-02/bin/nexus start
+      
+      
+      
+      
+      
+      
+      
+---
+-  name: welcome to ansible playbook
+   hosts: host
+   vars_prompt: 
+     - name: "prompt"
+       prompt: wthat's about your work
+     - name: "tumcat"
+       prompt: abot tomcat
+   gather_facts: false
+   tasks:
+     - name: startsonar
+       shell : nohup /opt/sonarqube-7.4/bin/linux-x86-64/sonar.sh {{ prompt }}
+       tags:
+         - sonar
+     - name: start tomcat
+       shell: /opt/apache-tomcat-9.0.36/bin/startup.sh {{ tumcat }}
+       tags:
+         - tomcat
+     - name: to start nexus
+       shell: nohup /opt/nexus-3.24.0-02/bin/nexus {{ prompt }}
+       tags:
+         - nexus
+         
+         
+         
+         
+         
+---
+-  name: welcome to ansible playbook
+   hosts: host
+   tasks:
+     - name: install apachy
+       yum:
+         name: httpd
+         state: installed
+     - name: copp
+       copy: 
+         src: /opt/index.html
+         dest: /var/www/html/
+       notify:
+        - restart
+   handlers:
+      - name: restart
+        service:
+          name: httpd
+          state: restarted
+
+      
+      
+      
+      
+---
+-  name: welcome to ansible playbook
+   hosts: host
+   vars: 
+     name: start
+     b: stop
+     c: status
+   gather_facts: false
+   tasks:
+     - name: startsonar
+       shell : nohup /opt/sonarqube-7.4/bin/linux-x86-64/sonar.sh {{ c }}
+       tags:
+         - sonar
+     - name: start tomcat
+       shell: /opt/apache-tomcat-9.0.36/bin/startup.sh {{ c }}
+       tags:
+         - tomcat
+     - name: to start nexus
+       shell: nohup /opt/nexus-3.24.0-02/bin/nexus {{ c }}
+       tags:
+         - nexus

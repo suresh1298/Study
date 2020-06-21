@@ -1,0 +1,58 @@
+properties ([pipelineTriggers([githubPush()])])
+
+node { git url: 'github private repo', branch: 'master' }
+
+
+
+pipeline {
+    agent any
+	stages {
+	    stage ("Update StatusPortal Image") {
+		    steps {
+				dir ("dockerfile path"){
+			    sh "docker build -t name:latest ."
+				}
+			}
+		}
+		stage ("Login to AWS-CLI"){
+			steps {
+				sh "pip install awscli --upgrade --user"
+				sh "export PATH=~/.local/bin:$PATH"
+				sh "adfs-cli --username name --password passwd --role arn:aws:iam::123456678:role/ADFS-Push-To-ECR-EWPS --profile default"
+			}
+		}
+		stage ("Login to ECR") {
+			steps {
+				sh "aws ecr get-login  --region eu-central-1 --no-include-email > ecs_login.sh"
+				sh "sh ecs_login.sh"
+			}
+		}
+		stage ("Tag/Push Image to ECR") {
+			steps {
+				sh "docker tag disha:latest 123456678.dkr.ecr.eu-central-1.amazonaws.com/statusportal_application:latest"
+				sh "docker push 123456678.dkr.ecr.eu-central-1.amazonaws.com/statusportal_application:latest"
+			}
+		}
+		stage ("Update the Cluster") {
+			steps {
+				sh "aws ecs update-service --cluster statusportal --service statusportal_application --force-new-deployment"
+			}
+		}
+	}
+    post {
+    success {
+        emailext (
+            to: 'eswar.reddy-ext@continental-corporation.com',
+            subject: "JOB: ${env.JOB_NAME} - SUCCESS",
+            body: "JOB SUCCESS - \"${env.JOB_NAME}\" Build No: ${env.BUILD_NUMBER}\n\nClick on the below link to view the logs:\n ${env.BUILD_URL}\n"
+        )
+    }
+    failure {
+		emailext (
+            to: 'eswar.reddy-ext@continental-corporation.com',
+            subject: "JOB: ${env.JOB_NAME} - FAILURE",
+            body: "JOB FAILURE - \"${env.JOB_NAME}\" Build No: ${env.BUILD_NUMBER}\n\nClick on the below link to view the logs:\n ${env.BUILD_URL}\n"
+        )
+    }
+    }
+}

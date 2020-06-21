@@ -1,0 +1,41 @@
+starting with 
+---
+-  name: welcome to ansible playbook
+   hosts: host
+   gather_facts: false
+   tasks:
+     - name:
+	   module:
+	     Arguments:
+		 src:
+		 dest:
+owner ship
+    - name: change ownership
+      file:
+        path: /opt/sonarqube-7.4
+        owner: ec2-user
+        group: ec2-user
+        recurse: yes	
+untar    
+    - name: unzip sonarqude
+      unarchive:
+        src: /opt/sonarqube-7.4.zip
+        dest: /opt/
+        remote_src: yes		
+wget     
+    - name: download sonarqube
+      get_url:
+        url: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-7.4.zip
+        dest: /opt
+        remote_src: yes
+		
+excutubal command
+    - name: startsonar
+      shell : nohup /opt/sonarqube-7.4/bin/linux-x86-64/sonar.sh start
+	  
+copy 
+    - name: copy sonarqube
+       copy:
+         src: /opt/sonarqube-7.4/bin/linux-x86-64/sonar.sh
+         dest: /opt/sonarqube-7.4/bin/linux-x86-64/
+	  

@@ -1,0 +1,172 @@
+
+yum install java* -y
+                 to inatall java in instance
+java -version
+                 to see the version wt was the present used by root 
+sudo alternatives --config java
+                 to see the versions of java what where present in current instance
+
+cd /root 
+export   which is used to show the previous exported paths in a list
+sudo alternatives --config java
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.222.b10-0.amzn2.0.1.x86_64     
+export JRE_JRE=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.222.b10-0.amzn2.0.1.x86_64/jre
+              to set jre home path for primary 
+export 
+              to see whether both jre and java paths exported or not
+echo $JAVA_HOME
+              to see the exported path for perticular home
+export PATH=$PATH:/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.222.b10-0.amzn2.0.1.x86_64/bin:/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.222.b10-0.amzn2.0.1.x86_64/jre/bin
+                in this both java home and jre home 
+cd /etc/profile.d/
+          vi java.sh
+             we have to create a file with .sh extenton then we have to fallow order
+             if we place in this directory system will directly read updated java version wt we plased in JAVA_HOME JAVA_JRE & PATH
+ export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.222.b10-0.amzn2.0.1.x86_64
+ export JRE_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.222.b10-0.amzn2.0.1.x86_64/jre
+ export PATH=$PATH:/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.222.b10-0.amzn2.0.1.x86_64/bin:/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.222.b10-0.amzn2.0.1.x86_64/jre/bin
+chmod +x java.sh
+              to add extention for that file
+source java.sh 
+            which is used to update the file what u placed in profile.d
+
+
+
+
+
+my sql instalation
+https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-centos-7
+
+ mysql -u root -p:
+      which is used to login to data base from using linux instance
+          which can be used to connect
+
+
+
+in project
+vi sonar-project.properties 
+sonar.host.url=http://13.233.90.188:9000/
+sonar.projectName=python
+sonar.projectKey=pyth
+sonar.projectVersion=1.0
+sonar.sources=.
+sonar.language=py
+sonar.login=admin
+sonar.password=admin
+
+
+
+        CREATE USER 'suresh' IDENTIFIED BY 'Suresh@11';
+        GRANT ALL ON sonar.* TO 'suresh'@'%' IDENTIFIED BY 'Suresh@11';    
+        GRANT ALL ON sonar.* TO 'suresh'@'localhost' IDENTIFIED BY 'Suresh@11';
+        FLUSH PRIVILEGES;
+
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.242.b08-0.amzn2.0.1.x86_64/
+export JRE_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.242.b08-0.amzn2.0.1.x86_64/jre
+export PATH=$PATH:/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.242.b08-0.amzn2.0.1.x86_64/bin:/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.242.b08-0.amzn2.0.1.x86_64/jre/bin
+
+
+maven to sonar intigration
+/maven/cof/settings.xml
+ 
+in plugingroup
+
+<pluginGroup>org.sonarsource.scanner.maven</pluginGroup>
+
+in profiles
+
+<profile>
+       <id>sonar</id>
+           <activation>
+                 <activeByDefault>true</activeByDefault>
+                 </activation>
+                <properties>
+                  <!-- Optional URL to server. Default value is http://localhost:9000 -->
+                         <sonar.host.url> 
+                            http://3.236.81.16:9000//
+                   </sonar.host.url>
+            </properties>
+         </profile>
+      </profiles>	
+
+
+
+nexus in pom.xml end of the build section
+
+<distributionManagement>
+    <repository>
+       <id>deployment</id>
+       <name>Internal releases</name>
+       <url>http://3.236.81.16:8081/repository/ansible_release/</url>
+    </repository>
+    <snapshotRepository>
+         <id>deployment</id>
+	 <name>snapshot releases</name>
+         <url>http://3.236.81.16:8081/repository/ansible_snapshot/</url>
+    </snapshotRepository>
+</distributionManagement>
+
+in maven settings.xml server session
+
+
+   <server>
+	<id>deployment</id>
+	<username>admin</username>
+	<password>123</password>
+   </server>
+
+
+<mirrors>
+    <mirror>
+      <id>central</id>
+      <name>central</name>
+      <url>http://13.233.90.188:8081/repository/suresh-group/</url>
+      <mirrorOf>*</mirrorOf>
+    </mirror>
+  </mirrors>
+
+
+
+<repositories>
+    <repository>
+      <id>suresh-group</id>
+      <url>http://13.233.90.188:8081/repository/suresh-group/</url>
+    </repository>
+  </repositories>
+</project>
+
+
+
+java configeration
+ci/cd
+job
+plugin
+manage jenkins
+tools intigration
+job configeration
+buld trigger
+maven/build/nexus/tomcat/
+pipeline /multibranch
+security
+nodes
+upstream/downstream  /build pipe line conifigeration
+email notification
+
+
+
+instalation
+tools intigrate
+job (free styl)
+scm/sonar/maven/nexus/tomcat
+build triggers
+upstream/downstream->build permisions
+
+pipeline /multibranch pipeline
+email notification
+nodes 
+securaity
+
+
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.252.b09-2.amzn2.0.1.x86_64-debug/
+export JRE_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.252.b09-2.amzn2.0.1.x86_64-debug/jre
+export PATH=$PATH:/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.252.b09-2.amzn2.0.1.x86_64-debug/bin:/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.252.b09-2.amzn2.0.1.x86_64-debug/jre/bin
